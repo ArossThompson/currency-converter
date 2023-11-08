@@ -2,7 +2,7 @@ interface InputProps {
     type: string;
     id: string;
     label: string;
-    value: number | string;
+    value: string;
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     placeholder: string;
     validationError?: string | null;
@@ -18,7 +18,7 @@ export const Input: React.FC<InputProps> = ({
     validationError,
 }) => {
     return (
-        <div className="input-container">
+        <div className="input-container" data-testid={id}>
             <label className="input-container__label" htmlFor={id}>
                 {label}
             </label>
@@ -34,7 +34,7 @@ export const Input: React.FC<InputProps> = ({
             />
 
             {validationError && (
-                <div className="error-message">{validationError}</div>
+                <div className="error-message" data-testid="validation-error">{validationError}</div>
             )}
         </div>
     );

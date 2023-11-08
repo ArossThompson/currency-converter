@@ -3,7 +3,7 @@ interface DropdownProps {
   onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   options: {
     value: string;
-    label: string;
+    name: string;
   }[];
 }
 
@@ -15,7 +15,7 @@ export const Dropdown = (props: DropdownProps) => {
     >
       {props.options.map((option) => (
         <option key={option.value} value={option.value}>
-          {option.label}
+          {option.name} ({option.value})
         </option>
       ))}
     </select>
