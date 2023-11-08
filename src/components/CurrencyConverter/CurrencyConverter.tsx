@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 
 import { Input } from "../Input/Input";
 import { Dropdown } from "../Dropdown/Dropdown";
+import { CurrencyDisplay } from "./CurrencyDisplay/CurrencyDisplay";
 
 import {
     currencyOptionsArray,
@@ -10,20 +11,20 @@ import {
 } from "./CurrencyConverter.util";
 
 export const CurrencyConverter = () => {
-    const [inputAmount, setinputAmount] = useState<string>("0");
+    const [inputAmount, setInputAmount] = useState<string>("0");
     const [inputError, setInputError] = useState<string | null>(null);
 
     const [baseRate, setBaseRate] = useState<string>("GBP");
     const [targetRate, setTargetRate] = useState<string>("USD");
 
     const [targetAmount, setTargetAmount] = useState<string | null>(null);
-    const [conversionExpiryCount, setConversionExpiryCount] =
-        useState<number>(0);
+
+    const [requestError, setRequestError] = useState<boolean>(false);
 
     const handleCurrencyValueChange = (
         e: React.ChangeEvent<HTMLInputElement>
     ): void => {
-        setinputAmount(e.target.value);
+        setInputAmount(e.target.value);
     };
 
     const handleConversionSelectionChange = (
@@ -52,20 +53,27 @@ export const CurrencyConverter = () => {
             const response = await fetch(
                 `https://open.er-api.com/v6/latest/${baseRate}`
             );
+
+            if (!response.ok) {
+                setRequestError(true);
+                throw new Error(`HTTP Error: ${response.status}`);
+            }
+
             const data = await response.json();
             const targetAmount = convertCurrency(
                 +data.rates[targetRate],
                 +inputAmount
             );
+
             setTargetAmount(targetAmount.toString());
+            setRequestError(false);
         } catch (error) {
-            console.log(error);
+            console.error(error);
+            setRequestError(true);
         }
     };
 
     useEffect(() => {
-        setConversionExpiryCount(10);
-
         const exchangeTimer = setInterval(() => {
             setTargetAmount(null);
         }, 10000);
@@ -73,16 +81,6 @@ export const CurrencyConverter = () => {
         // clean up
         return () => clearInterval(exchangeTimer);
     }, [targetAmount]);
-
-    useEffect(() => {
-        const conversionExpiryTimer = setInterval(() => {
-            if (conversionExpiryCount > 0) {
-                setConversionExpiryCount(conversionExpiryCount - 1);
-            }
-        }, 1000);
-
-        return () => clearInterval(conversionExpiryTimer);
-    }, [conversionExpiryCount]);
 
     return (
         <>
@@ -108,17 +106,25 @@ export const CurrencyConverter = () => {
                     onChange={(e) => handleConversionSelectionChange(e, false)}
                 />
 
-                <button type="submit">Convert</button>
+                <button type="submit" aria-label="Convert">
+                    Convert
+                </button>
             </form>
 
             {targetAmount && (
-                <div className="currency-display">
-                    <h1>
-                        {inputAmount} {baseRate} is equivelant to {targetAmount}{" "}
-                        {targetRate}
-                    </h1>
-                    <p>This will expire in {conversionExpiryCount} seconds</p>
-                </div>
+                <CurrencyDisplay
+                    inputAmount={inputAmount}
+                    baseRate={baseRate}
+                    targetAmount={targetAmount}
+                    targetRate={targetRate}
+                    initialCount={10}
+                />
+            )}
+
+            {requestError && (
+                <p className="error-message" data-testid="validation-error">
+                    There was an error with your request, please try again
+                </p>
             )}
         </>
     );
