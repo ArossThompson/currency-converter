@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-
 import { Input } from "../Input/Input";
 import { Dropdown } from "../Dropdown/Dropdown";
 import { ConversionDisplay } from "./CurrencyDisplay/ConversionDisplay";
@@ -9,6 +8,15 @@ import {
     currencyValueValidator,
     convertCurrency,
 } from "../../utils/CurrencyConverter.util";
+
+import "./currencyConverter.scss";
+
+interface RatesResponse {
+    rates: {
+        [currencyCode: string]: number;
+    };
+    // Add other properties as needed
+}
 
 export const CurrencyConverter = () => {
     const [inputAmount, setInputAmount] = useState<string>("0");
@@ -56,7 +64,8 @@ export const CurrencyConverter = () => {
                 throw new Error(`HTTP Error: ${response.status}`);
             }
 
-            const data = await response.json();
+            const data: RatesResponse = await response.json();
+
             const targetAmount = convertCurrency(
                 +data.rates[targetRate],
                 +inputAmount
@@ -80,30 +89,41 @@ export const CurrencyConverter = () => {
     }, [targetAmount]);
 
     return (
-        <div data-testid="currency-converter">
+        <div data-testid="currency-converter" className="currency-converter">
             <form onSubmit={handleSubmit}>
-                <Input
-                    id="currency-amount"
-                    label="Amount"
-                    type="text"
-                    value={inputAmount}
-                    onChange={handleCurrencyValueChange}
-                    placeholder="Enter amount"
-                    validationError={inputError}
-                />
+                <div className="currency-converter__input">
+                    <Input
+                        id="currency-amount"
+                        label="Amount"
+                        type="text"
+                        value={inputAmount}
+                        onChange={handleCurrencyValueChange}
+                        placeholder="Enter amount"
+                        validationError={inputError}
+                    />
+                </div>
 
-                <Dropdown
-                    id="base-currency"
-                    options={currencyOptionsArray}
-                    value={baseRate}
-                    onChange={(e) => handleConversionSelectionChange(e, true)}
-                />
-                <Dropdown
-                    id="target-currency"
-                    options={currencyOptionsArray}
-                    value={targetRate}
-                    onChange={(e) => handleConversionSelectionChange(e, false)}
-                />
+                <div className="currency-converter__dropdown">
+                    <Dropdown
+                        id="base-currency"
+                        options={currencyOptionsArray}
+                        value={baseRate}
+                        onChange={(e) =>
+                            handleConversionSelectionChange(e, true)
+                        }
+                    />
+                </div>
+
+                <div className="currency-converter__dropdown">
+                    <Dropdown
+                        id="target-currency"
+                        options={currencyOptionsArray}
+                        value={targetRate}
+                        onChange={(e) =>
+                            handleConversionSelectionChange(e, false)
+                        }
+                    />
+                </div>
 
                 <button type="submit" aria-label="Convert">
                     Convert

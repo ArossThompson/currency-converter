@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 
+import './dropdown.scss';
+
 type option = {
   value: string;
   label: string;
