@@ -6,15 +6,13 @@ The React Currency Converter is a web application built using Vite, Typescript, 
 
 Run the following commands: 
 
-   npm install
-   npm run dev
+npm install -> npm run dev
 
 ## Running tests
 
 Run the following commands
 
-No coverage: npm run test
-With coverage: npm run test:coverage
+No coverage: npm run test | With coverage: npm run test:coverage
 
 
 ## Notes for Consideration
