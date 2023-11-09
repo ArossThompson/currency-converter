@@ -22,3 +22,5 @@ Dropdown Search Filtering: The current implementation of dropdown search filteri
 Flag Images:  I ran into the late realisation that I was unable to include images inside a select option. I hope you can see that the currencyConverter.util.ts file demonstrates the ability to store corresponding flag codes in the options array objects. With further refactoring of the dropdown component, this feature can be implemented.
 
 I wanted to show a focus on good coding practices: The project focuses on clean and readable code, responsiveness, accessibility, making good use of TypeScript with a maintainable project layout/separation of concerns.
+
+Interfaces and types have been written inline with components, however I would consider separting them into their own folder in a larger project.

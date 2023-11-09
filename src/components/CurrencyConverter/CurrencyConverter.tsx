@@ -75,6 +75,7 @@ export const CurrencyConverter = () => {
 
             const data: RatesResponse = await response.json();
 
+            // convert currency using utility function
             const targetAmount = convertCurrency(
                 +data.rates[targetRate],
                 +inputAmount

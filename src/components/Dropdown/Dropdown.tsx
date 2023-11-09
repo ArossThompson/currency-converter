@@ -55,6 +55,8 @@ export const Dropdown: React.FC<DropdownProps> = ({
             } else {
                 setSearchValidationError(false);
                 setFilteredOptions(filtered);
+
+                // Set the value of the dropdown to the first filtered option
                 onSearch(filtered[0].value);
             }
         }
