@@ -2,23 +2,20 @@ import { useState, useEffect } from "react";
 
 import { Input } from "../Input/Input";
 import { Dropdown } from "../Dropdown/Dropdown";
-import { CurrencyDisplay } from "./CurrencyDisplay/CurrencyDisplay";
+import { ConversionDisplay } from "./CurrencyDisplay/ConversionDisplay";
 
 import {
     currencyOptionsArray,
     currencyValueValidator,
     convertCurrency,
-} from "./CurrencyConverter.util";
+} from "../../utils/CurrencyConverter.util";
 
 export const CurrencyConverter = () => {
     const [inputAmount, setInputAmount] = useState<string>("0");
     const [inputError, setInputError] = useState<string | null>(null);
-
     const [baseRate, setBaseRate] = useState<string>("GBP");
     const [targetRate, setTargetRate] = useState<string>("USD");
-
     const [targetAmount, setTargetAmount] = useState<string | null>(null);
-
     const [requestError, setRequestError] = useState<boolean>(false);
 
     const handleCurrencyValueChange = (
@@ -83,7 +80,7 @@ export const CurrencyConverter = () => {
     }, [targetAmount]);
 
     return (
-        <>
+        <div data-testid="currency-converter">
             <form onSubmit={handleSubmit}>
                 <Input
                     id="currency-amount"
@@ -96,11 +93,13 @@ export const CurrencyConverter = () => {
                 />
 
                 <Dropdown
+                    id="base-currency"
                     options={currencyOptionsArray}
                     value={baseRate}
                     onChange={(e) => handleConversionSelectionChange(e, true)}
                 />
                 <Dropdown
+                    id="target-currency"
                     options={currencyOptionsArray}
                     value={targetRate}
                     onChange={(e) => handleConversionSelectionChange(e, false)}
@@ -112,7 +111,7 @@ export const CurrencyConverter = () => {
             </form>
 
             {targetAmount && (
-                <CurrencyDisplay
+                <ConversionDisplay
                     inputAmount={inputAmount}
                     baseRate={baseRate}
                     targetAmount={targetAmount}
@@ -122,10 +121,10 @@ export const CurrencyConverter = () => {
             )}
 
             {requestError && (
-                <p className="error-message" data-testid="validation-error">
+                <p className="error-message" data-testid="request-error">
                     There was an error with your request, please try again
                 </p>
             )}
-        </>
+        </div>
     );
 };

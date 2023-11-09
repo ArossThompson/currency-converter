@@ -172,7 +172,7 @@ const currencyListOptions = {
 }
 
 // convert object to array of objects
-export const currencyOptionsArray = Object.entries(currencyListOptions).map(([value, name]) => ({ value, name }));
+export const currencyOptionsArray = Object.entries(currencyListOptions).map(([value, label]) => ({ value, label }));
 
 export const currencyValueValidator = (value: string) : boolean => {
   const regex = /^[1-9]\d*(\.\d+)?$/;

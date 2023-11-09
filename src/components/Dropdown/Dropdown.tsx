@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import "./_dropdown.scss";
 
 type option = {
   value: string;

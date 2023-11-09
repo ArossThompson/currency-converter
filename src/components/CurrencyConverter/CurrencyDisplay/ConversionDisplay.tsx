@@ -7,7 +7,7 @@ interface CurrencyDisplayProps {
     initialCount: number;
 }
 
-export const CurrencyDisplay: React.FC<CurrencyDisplayProps> = ({
+export const ConversionDisplay: React.FC<CurrencyDisplayProps> = ({
     inputAmount,
     baseRate,
     targetAmount,
@@ -30,6 +30,7 @@ export const CurrencyDisplay: React.FC<CurrencyDisplayProps> = ({
 
     return (
         <div
+            data-testid="conversion-display"
             className="currency-display"
             aria-live="assertive"
             aria-labelledby="conversion-label"
