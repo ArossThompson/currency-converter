@@ -1,27 +1,26 @@
-# React + TypeScript + Vite
+# Description
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+The React Currency Converter is a web application built using Vite, Typescript, and SCSS. It allows users to convert between different currencies using up-to-date exchange rates. The application is unit tested using Vitest and the React Testing Library to ensure its reliability.
 
-Currently, two official plugins are available:
+## Getting Started
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Run the following commands: 
 
-## Expanding the ESLint configuration
+   npm install
+   npm run dev
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Running tests
 
-- Configure the top-level `parserOptions` property like this:
+Run the following commands
 
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
-```
+No coverage: npm run test
+With coverage: npm run test:coverage
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+
+## Notes for Consideration
+
+Dropdown Search Filtering: The current implementation of dropdown search filtering is functional but can be further improved. If I had more time away from work commitments, I would consider using a library like React-select for a better experience or I would manually integrate the search input and dropdown as one searchable component. I wanted to get a solution over to you and I didn't have a great deal of time. 
+
+Flag Images:  I ran into the late realisation that I was unable to include images inside a select option. I hope you can see that the currencyConverter.util.ts file demonstrates the ability to store corresponding flag codes in the options array objects. With further refactoring of the dropdown component, this feature can be implemented.
+
+I wanted to show a focus on good coding practices: The project focuses on clean and readable code, making good use of TypeScript. It has a maintainable project layout/separation of concerns, and uses SCSS variables for styling consistency.

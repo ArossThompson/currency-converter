@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import './converisonDisplay.scss';
+
 interface CurrencyDisplayProps {
     inputAmount: string;
     baseRate: string;
@@ -14,7 +16,8 @@ export const ConversionDisplay: React.FC<CurrencyDisplayProps> = ({
     targetRate,
     initialCount,
 }) => {
-    const [conversionExpiryCount, setConversionExpiryCount] = useState<number>(initialCount);
+    const [conversionExpiryCount, setConversionExpiryCount] =
+        useState<number>(initialCount);
 
     useEffect(() => {
         // handle conversion display timer
@@ -31,15 +34,18 @@ export const ConversionDisplay: React.FC<CurrencyDisplayProps> = ({
     return (
         <div
             data-testid="conversion-display"
-            className="currency-display"
+            className="conversion-display"
             aria-live="assertive"
             aria-labelledby="conversion-label"
         >
-            <h1 id="conversion-label">
-                {inputAmount} {baseRate} is equivelant to {targetAmount}{" "}
-                {targetRate}
-            </h1>
-            <p>This will expire in {conversionExpiryCount} seconds</p>
+            <p id="conversion-display__content">
+                <strong>{inputAmount} {baseRate}</strong> is equivelant to <strong>{targetAmount} {targetRate}</strong>
+                
+            </p>
+
+            <div className="conversion-display__notification">
+                <p>This will expire in {conversionExpiryCount} seconds</p>
+            </div>
         </div>
     );
 };

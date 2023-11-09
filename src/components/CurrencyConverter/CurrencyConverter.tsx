@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import { Input } from "../Input/Input";
 import { Dropdown } from "../Dropdown/Dropdown";
-import { ConversionDisplay } from "./CurrencyDisplay/ConversionDisplay";
+import { ConversionDisplay } from "./ConversionDisplay/ConversionDisplay";
+
+import { HiMiniArrowsUpDown } from "react-icons/hi2";
 
 import {
     currencyOptionsArray,
@@ -15,11 +17,10 @@ interface RatesResponse {
     rates: {
         [currencyCode: string]: number;
     };
-    // Add other properties as needed
 }
 
 export const CurrencyConverter = () => {
-    const [inputAmount, setInputAmount] = useState<string>("0");
+    const [inputAmount, setInputAmount] = useState<string>("");
     const [inputError, setInputError] = useState<string | null>(null);
     const [baseRate, setBaseRate] = useState<string>("GBP");
     const [targetRate, setTargetRate] = useState<string>("USD");
@@ -41,11 +42,19 @@ export const CurrencyConverter = () => {
             : setTargetRate(e.target.value);
     };
 
+    const handleConversionFilterSelection = (value: string, startingCurrency: boolean): void => { 
+        startingCurrency
+            ? setBaseRate(value)
+            : setTargetRate(value);
+    };
+    
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
         e.preventDefault();
 
         if (currencyValueValidator(inputAmount)) {
-            setInputError(`${inputAmount} is not a valid number`);
+            inputAmount === ""
+                ? setInputError("Please enter an amount")
+                : setInputError(`${inputAmount} is not a valid number`);
             return;
         }
 
@@ -53,7 +62,7 @@ export const CurrencyConverter = () => {
         handleConversionRequest();
     };
 
-    const handleConversionRequest = async () => {
+    const handleConversionRequest = async (): Promise<void> => {
         try {
             const response = await fetch(
                 `https://open.er-api.com/v6/latest/${baseRate}`
@@ -82,6 +91,7 @@ export const CurrencyConverter = () => {
     useEffect(() => {
         const exchangeTimer = setInterval(() => {
             setTargetAmount(null);
+            setInputAmount("");
         }, 10000);
 
         // clean up
@@ -90,45 +100,59 @@ export const CurrencyConverter = () => {
 
     return (
         <div data-testid="currency-converter" className="currency-converter">
-            <form onSubmit={handleSubmit}>
-                <div className="currency-converter__input">
-                    <Input
-                        id="currency-amount"
-                        label="Amount"
-                        type="text"
-                        value={inputAmount}
-                        onChange={handleCurrencyValueChange}
-                        placeholder="Enter amount"
-                        validationError={inputError}
-                    />
-                </div>
+            {!targetAmount && (
+                <form onSubmit={handleSubmit}>
+                    <div className="currency-converter__input">
+                        <Input
+                            id="currency-amount"
+                            label="Amount"
+                            type="text"
+                            value={inputAmount}
+                            onChange={handleCurrencyValueChange}
+                            placeholder="Enter amount"
+                            validationError={inputError}
+                        />
 
-                <div className="currency-converter__dropdown">
-                    <Dropdown
-                        id="base-currency"
-                        options={currencyOptionsArray}
-                        value={baseRate}
-                        onChange={(e) =>
-                            handleConversionSelectionChange(e, true)
-                        }
-                    />
-                </div>
+                        <hr />
+                    </div>
 
-                <div className="currency-converter__dropdown">
-                    <Dropdown
-                        id="target-currency"
-                        options={currencyOptionsArray}
-                        value={targetRate}
-                        onChange={(e) =>
-                            handleConversionSelectionChange(e, false)
-                        }
-                    />
-                </div>
+                    <div className="currency-converter__dropdown">
+                        <Dropdown
+                            inputId="base-currency-search"
+                            inputLabel="Search or select your base currency"
+                            id="base-currency"
+                            options={currencyOptionsArray}
+                            value={baseRate}
+                            onChange={(e) =>
+                                handleConversionSelectionChange(e, true)
+                            }
+                            onSearch={(value) => handleConversionFilterSelection(value, true)}
+                        />
+                    </div>
 
-                <button type="submit" aria-label="Convert">
-                    Convert
-                </button>
-            </form>
+                    <div className="currency-converter__icon">
+                        <HiMiniArrowsUpDown />
+                    </div>
+
+                    <div className="currency-converter__dropdown">
+                        <Dropdown
+                            inputId="target-currency-search"
+                            inputLabel="Search or select your target currency"
+                            id="target-currency"
+                            options={currencyOptionsArray}
+                            value={targetRate}
+                            onChange={(e) =>
+                                handleConversionSelectionChange(e, false)
+                            }
+                            onSearch={(value) => handleConversionFilterSelection(value, false)}
+                        />
+                    </div>
+
+                    <button type="submit" aria-label="Convert">
+                        Convert
+                    </button>
+                </form>
+            )}
 
             {targetAmount && (
                 <ConversionDisplay

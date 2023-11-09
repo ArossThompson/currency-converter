@@ -1,9 +1,23 @@
-.dropdown {
-  display: flex;
-  flex-direction: column;
-  margin: 10px 0;
+@import "../../scss/vars.scss";
 
-  &__search {
-    margin-bottom: 10px;
-  }
+.dropdown-container {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: $spacing-lg;
+
+    &__select {
+        width: 100%;
+        border-radius: 4px;
+        background-color: $white;
+        background-repeat: no-repeat;
+        padding: $spacing-sm $spacing-md;
+
+        img {
+            z-index: 99;
+        }
+    }
+
+    &__error {
+        border-color: $red;
+    }
 }

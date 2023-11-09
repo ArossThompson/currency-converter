@@ -1,0 +1,29 @@
+@import "../../scss/vars.scss";
+
+.input-container {
+    margin-bottom: 10px;
+    &__input {
+        width: 100%;
+        box-sizing: border-box;
+        border: 2px solid $grey;
+        border-radius: 4px;
+        font-size: 16px;
+        background-color: white;
+        background-repeat: no-repeat;
+        padding: 6px 8px;
+
+        &--error {
+          border-color: $red;
+        }
+
+        &:focus {
+          outline: none;
+        }
+    }
+
+    &__error-message {
+      color: $red;
+      font-size: $font-size-sm;
+      margin-top: 5px;
+    }
+}

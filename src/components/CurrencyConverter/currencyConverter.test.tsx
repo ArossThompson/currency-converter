@@ -65,36 +65,57 @@ describe("CurrencyConverter", () => {
         fireEvent.click(convertButton);
 
         await waitFor(() => {
-          expect(
-              screen.getByTestId("request-error")
-          ).toBeInTheDocument();
-      });
+            expect(screen.getByTestId("request-error")).toBeInTheDocument();
+        });
     });
 
     it("should be able to provide validation if an invalid number is submitted", async () => {
-      render(<CurrencyConverter />);
+        render(<CurrencyConverter />);
 
-      global.fetch = vi.fn().mockResolvedValue({
-          ok: false,
-          status: 500,
-          statusText: "Internal Server Error",
-      });
+        global.fetch = vi.fn().mockResolvedValue({
+            ok: false,
+            status: 500,
+            statusText: "Internal Server Error",
+        });
 
-      const inputAmount = screen.getByLabelText("Amount");
-      const baseCurrencyDropdown = screen.getByTestId("base-currency");
-      const targetCurrencyDropdown = screen.getByTestId("target-currency");
-      const convertButton = screen.getByText("Convert");
+        const inputAmount = screen.getByLabelText("Amount");
+        const baseCurrencyDropdown = screen.getByTestId("base-currency");
+        const targetCurrencyDropdown = screen.getByTestId("target-currency");
+        const convertButton = screen.getByText("Convert");
 
-      fireEvent.change(inputAmount, { target: { value: "abc" } });
-      fireEvent.change(baseCurrencyDropdown, { target: { value: "GBP" } });
-      fireEvent.change(targetCurrencyDropdown, { target: { value: "USD" } });
+        fireEvent.change(inputAmount, { target: { value: "abc" } });
+        fireEvent.change(baseCurrencyDropdown, { target: { value: "GBP" } });
+        fireEvent.change(targetCurrencyDropdown, { target: { value: "USD" } });
 
-      fireEvent.click(convertButton);
+        fireEvent.click(convertButton);
 
-      await waitFor(() => {
-        expect(
-            screen.getByTestId("validation-error")
-        ).toBeInTheDocument();
+        await waitFor(() => {
+            expect(screen.getByTestId("validation-error")).toBeInTheDocument();
+        });
     });
-  });
+
+    it("should be able to provide validation if an no number is submitted", async () => {
+        render(<CurrencyConverter />);
+
+        global.fetch = vi.fn().mockResolvedValue({
+            ok: false,
+            status: 500,
+            statusText: "Internal Server Error",
+        });
+
+        const inputAmount = screen.getByLabelText("Amount");
+        const baseCurrencyDropdown = screen.getByTestId("base-currency");
+        const targetCurrencyDropdown = screen.getByTestId("target-currency");
+        const convertButton = screen.getByText("Convert");
+
+        fireEvent.change(inputAmount, { target: { value: "" } });
+        fireEvent.change(baseCurrencyDropdown, { target: { value: "GBP" } });
+        fireEvent.change(targetCurrencyDropdown, { target: { value: "USD" } });
+
+        fireEvent.click(convertButton);
+
+        await waitFor(() => {
+            expect(screen.getByTestId("validation-error")).toBeInTheDocument();
+        });
+    });
 });

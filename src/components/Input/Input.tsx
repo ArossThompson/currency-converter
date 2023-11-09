@@ -1,3 +1,5 @@
+import './input.scss';
+
 interface InputProps {
     type: string;
     id: string;
@@ -25,7 +27,7 @@ export const Input: React.FC<InputProps> = ({
 
             <input
                 data-testid="input"
-                className="input-container__input"
+                className={validationError ? "input-container__input input-container__input--error" : "input-container__input"}
                 id={id}
                 type={type}
                 value={value}
@@ -34,7 +36,7 @@ export const Input: React.FC<InputProps> = ({
             />
 
             {validationError && (
-                <div className="error-message" data-testid="validation-error">{validationError}</div>
+                <div className="input-container__error-message" data-testid="validation-error">{validationError}</div>
             )}
         </div>
     );
